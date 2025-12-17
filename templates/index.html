@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BVS API Tester</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="text-center mb-4">BVS API Tester</h1>
+        <div class="text-center">
+            <button id="runBtn" class="btn btn-primary btn-lg">Run All APIs</button>
+        </div>
+        <div id="output" class="mt-4"></div>
+    </div>
+
+    <script>
+        document.getElementById("runBtn").addEventListener("click", async () => {
+            const output = document.getElementById("output");
+            output.innerHTML = "<p>Running APIs...</p>";
+
+            const res = await fetch("/run-apis");
+            const data = await res.json();
+
+            output.innerHTML = "";
+            for (const [key, value] of Object.entries(data)) {
+                const card = document.createElement("div");
+                card.className = "card mb-3";
+                card.innerHTML = `
+                    <div class="card-header fw-bold">${key}</div>
+                    <div class="card-body"><pre>${JSON.stringify(value, null, 2)}</pre></div>
+                `;
+                output.appendChild(card);
+            }
+        });
+    </script>
+</body>
+</html>
